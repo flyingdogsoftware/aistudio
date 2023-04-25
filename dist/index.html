@@ -1,0 +1,589 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Kalam:wght@300;400;700&display=swap" rel="stylesheet">
+    <script src="node_modules/@fds-components/fds-treeview/dist/fds-treeview.js"></script>
+    <script src="node_modules/@fds-components/fds-tabs/dist/fds-tabs.js"></script>
+    <script src="node_modules/@fds-components/fds-tippy/dist/fds-tippy.js"></script>
+    <script src="node_modules/@fds-components/fds-ai-image-editor/dist/fds-ai-image-editor.js?3"></script>
+    <script src="node_modules/@fds-components/fds-pose-editor/dist/fds-pose-editor.js?5"></script>
+    <script src="node_modules/@fds-components/fds-image-editor-text/dist/fds-image-editor-text.js?2"></script>
+
+    <script src="node_modules/@fds-components/fds-3d-scene/dist/fds-3d-scene.js?3"></script>
+    <script src="node_modules/@fds-components/fds-local-files/dist/fds-local-files.js?1"></script>
+    <link href='https://fonts.googleapis.com/css?family=Montez|Lobster|Josefin+Sans|Shadows+Into+Light|Pacifico|Amatic+SC:700|Orbitron:400,900|Rokkitt|Righteous|Dancing+Script:700|Bangers|Chewy|Sigmar+One|Architects+Daughter|Abril+Fatface|Covered+By+Your+Grace|Kaushan+Script|Gloria+Hallelujah|Satisfy|Lobster+Two:700|Comfortaa:700|Cinzel|Courgette' rel='stylesheet' type='text/css'  data-noprefix>
+
+
+    <script  src="bootstrap.js?1"></script>
+    <script  src="appdata/brushes/tinycolor.js"></script>
+    <script  src="appdata/brushes/brush_Default.js?5"></script>
+    <script  src="appdata/brushes/brush_Oil_A.js?4"></script>
+    <script  src="appdata/brushes/brush_Caligraphy.js?20"></script>
+    <script  src="appdata/brushes/brush_FromLayers.js?19"></script>
+    
+    <script src="magica.umd.js?MAGICA_WASM_LOCATION=magick.wasm"></script>
+
+    <script src="https://cdn.babylonjs.com/babylon.js"></script>
+    <script src="https://preview.babylonjs.com/loaders/babylonjs.loaders.min.js?t=1677866119710"></script>
+    <script src="babylon/babylon.gridMaterial.min.js"></script>
+
+    <script src="fds-image-editor-canvas.js?18"></script>
+
+
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter&display=swap" rel="stylesheet">
+    <style>
+        :root {
+        color-scheme: dark;
+        }        
+        body {
+            font-size: 12px;
+            font-family: 'Inter', sans-serif;
+            background-color: var( --theme-bgcolor);
+            margin: 0;
+            overflow: hidden;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+
+        * {
+            box-sizing: border-box;
+        }
+        .psColorScheme {
+            --theme-stage-color: #282828;
+            --theme-btn-selected-bgcolor: #454545;
+            --theme-btn-selected-border-color: #5e5e5e;
+            --theme-btn-text-color:#dddddd;
+            --theme-bgcolor: #4c4c4c;
+            --theme-dialog-bgcolor: #4c4c4c;
+            --theme-text-color:#dddddd;
+            --theme-internal-seperator-color: #707070;
+            /* Slider */
+            --theme-slider-track-bgcolor: #757575;
+            --theme-slider-track-focus-bgcolor: #367ebd;
+            --theme-slider-track-border-color: #010101;
+            --theme-slider-thumb-color: #dddddd;
+        }
+        .darkColorScheme {
+            --theme-stage-color: #1d1d1d;
+            --theme-btn-selected-bgcolor: #ddb74f;
+            --theme-btn-selected2-bgcolor: #e3ce74;
+
+            --theme-btn-selected-border-color: #ddb74f;
+            --theme-btn-text-color:#fbfbfb;
+            --theme-btn-selected-text-color:#272727;
+            --theme-bgcolor: #323232;
+            --theme-dialog-bgcolor: #202020;
+            --theme-text-color:#ebebeb;
+            --theme-internal-seperator-color: #535353;
+            /* Slider */
+            --theme-slider-track-bgcolor: #757575;
+            --theme-slider-track-focus-bgcolor: #ddb74f;
+            --theme-slider-track-border-color: #010101;
+            --theme-slider-thumb-color: #dddddd;
+        }
+        .swal-button--confirm {
+            border: none;
+            background-color: #ddb74f;
+            color: #272727;
+        }
+        .swal-button--confirm:not([disabled]):hover {
+            border: none;
+            background-color: #e3ce74;
+        }
+        .swal-title {
+            font-weight: bold;
+            font-size: 16px;
+        }
+    </style>
+<body class="darkColorScheme"> 
+<script >
+
+    window.addEventListener("load",() => {
+        console.log(window.postMessageAdapter);
+        window.demomode = !window.postMessageAdapter;
+        let documentInfo={width:2301,height:1536}
+        let layers=[
+      //  {id:4,type:"generate",status:"waiting",name:"fog",x:1000,y:800,width:512,height:512,visible:true, generate: {mode: "txt2img",prompt: "fog",modifiers:"highly detailed\nphoto",num:2,steps:15}},
+        {id:1,type:"image",url:"img/fog1.png",name:"fog",x:100,y:800,width:512,height:512,visible:true,imagelist:[
+            {urlRef: "img/fog1.png",seed:1234543},
+            {urlRef: "img/fog2.png",seed:1235656},
+            {urlRef: "img/fog3.png",seed:1234543},
+            {urlRef: "img/fog4.png",seed:1234543},
+            {urlRef: "img/fog5.png",seed:1234543},
+            {urlRef: "img/fog6.png",seed:1234543},
+            {urlRef: "img/fog7.png",seed:1234543},
+            {urlRef: "img/fog8.png",seed:1234543},
+            {urlRef: "img/fog9.png",seed:1234543},
+            {urlRef: "img/fog10.png",seed:1234543}
+            ],
+            status:"ready",
+            currentSelected:0,
+            generate: {mode: "img2img",prompt: "fog",modifiers:"highly detailed\nphoto",strength:0.5,num:10,steps:20}
+            },
+
+       /*     {id:2,type:"image",url:"test2.png",name:"Test image",x:998,y:1234,width:512,height:512,visible:true,currentSelected:0},*/
+       /*     {id:10,type:"3d",url:"scene.gltf",name:"3D Still Life",x:300,y:1300,width:512,height:512,visible:true,currentSelected:0}, */
+
+        /*    {id:4,type:"image",url:"img/11-512x512.jpg",name:"Background image",x:300,y:1300,width:500,height:500,visible:true},
+            {id:5,type:"image",url:"img/71-512x512.jpg",name:"Background image",x:400,y:90,width:500,height:500,visible:true},
+            {id:6,type:"image",url:"img/114-512x512.jpg",name:"Background image",x:800,y:890,width:500,height:500,visible:true},
+            {id:7,type:"image",url:"img/118-512x512.jpg",name:"Background image",x:1200,y:760,width:500,height:500,visible:true},
+            {id:8,type:"image",url:"img/190-512x512.jpg",name:"Background image",x:849,y:650,width:500,height:500,visible:true},
+            {id:9,type:"image",url:"img/324-512x512.jpg",name:"Background image",x:950,y:350,width:500,height:500,visible:true},
+            {id:10,type:"image",url:"img/407-512x512.jpg",name:"Background image",x:1200,y:1250,width:500,height:500,visible:true},
+            {id:11,type:"image",url:"img/482-512x512.jpg",name:"Background image",x:110,y:1120,width:500,height:500,visible:true},
+            {id:12,type:"image",url:"img/506-512x512.jpg",name:"Background image",x:1230,y:680,width:500,height:500,visible:true},
+            {id:13,type:"image",url:"img/511-512x512.jpg",name:"Background image",x:800,y:230,width:500,height:500,visible:true},
+            {id:14,type:"image",url:"img/631-512x512.jpg",name:"Background image",x:1300,y:456,width:500,height:500,visible:true},
+            {id:15,type:"image",url:"img/716-512x512.jpg",name:"Background image",x:150,y:890,width:500,height:500,visible:true},
+            {id:16,type:"image",url:"img/718-512x512.jpg",name:"Background image",x:280,y:567,width:500,height:500,visible:true},
+            {id:17,type:"image",url:"img/799-512x512.jpg",name:"Background image",x:1250,y:786,width:500,height:500,visible:true},
+            {id:18,type:"image",url:"img/729-512x512.jpg",name:"Background image",x:970,y:0,width:500,height:500,visible:true},*/
+
+          /*  {id:3,type:"image",url:"test.jpg",name:"Background image",x:0,y:0,width:2160,height:3240,visible:true,currentSelected:0} */
+          {id:3,type:"image",url:"img/hallway.jpg",name:"Background image",x:0,y:0,width:2301,height:1536,visible:true,currentSelected:0}
+        ]
+        let Config={
+    "parameters": {
+        "prompt": "",
+        "steps": 0,
+        "seed": 0,
+        "num": 0,
+        "sampling_method": "LMS",
+        "seedList": [
+            "",
+            "",
+            "",
+            ""
+        ],
+        "imageDialog": null,
+        "regenerate": false,
+        "image64": "",
+        "maskImage64": "",
+        "inpaint_mask_blur": "4",
+        "inpaint_mask_content": "latent noise",
+        "mode": "txt2img",
+        "strength": "1"
+    },
+    "generalConfig": {
+        "url": "https://vista-establishment-prior-ken.trycloudflare.com",
+        "tokenid": "okxhzck4ln",
+        "token": "mVDyajClir_tfSmI1ABRJw",
+        "name": "SD GRPC vast.ai",
+        "type": "SDGRPC",
+        "width": "512",
+        "height": "512",
+        "m1fix": false,
+        "allVisible": true,
+        "dlgData": {
+            "mode": "txt2img",
+            "prompt": "photo of people having a party with a roast",
+            "seed": "",
+            "steps": 15,
+            "steps_update": "50",
+            "num": 2,
+            "modifiers": "highly detailed",
+            "cfg_value": "7.5",
+            "strength": ".75",
+            "sampling_method": "DPMSolver++ 2M (Fast)",
+            "tiling": false,
+            "enable_hr": false,
+            "clip": false,
+            "restore_faces": false,
+            "previewMode": ""
+        },
+        "size": "1024x1024",
+        "timeCalculation": 241.46666666666667,
+        "model": "stable-diffusion-v1-5-standard"
+    },
+    "globalData": {
+        "modifiers": "highly detailed\r-ugly\r-helmet\r-3d render\rbeautiful\rphoto\rphoto realistic\r",
+        "prompt": "fog"
+    },
+    "ModifierData": {
+        "list": [
+            {
+                "name": "to photo",
+                "prompt": "beautiful woman",
+                "override_prompt": false,
+                "modifiers": "highly detailed\r-ugly\r-helmet\r-3d render\rbeautiful\rphoto\rphoto realistic\r",
+                "tags": "MJ"
+            },
+            {
+                "name": "product photo",
+                "prompt": "tonic water can ",
+                "modifiers": "highly detailed\rfull view\rproduct photo\radvertising photo",
+                "tags": "product"
+            },
+            {
+                "name": "background restoration",
+                "prompt": "background",
+                "override_prompt": true,
+                "modifiers": "highly detailed",
+                "tags": "product"
+            },
+            {
+                "name": "woman head",
+                "prompt": "woman head",
+                "override_prompt": true,
+                "modifiers": "beautiful\r-ugly\rnice",
+                "tags": "MJ"
+            },
+            {
+                "name": "female hand",
+                "prompt": "female hand, red fingernails",
+                "override_prompt": true,
+                "modifiers": "beautiful\r-ugly\r-too many fingers\rnice\rbeautiful",
+                "tags": "MJ"
+            }
+        ],
+        "tags": "MJ,product"
+    },
+    "configList": [
+        {
+            "generalConfig": {
+                "url": "http://127.0.0.1:7860",
+                "tokenid": "isy55srm6r",
+                "token": "",
+                "name": "Automatic1111",
+                "type": "SD A1111",
+                "inpaint_mask_blur": "4",
+                "inpaint_mask_content": "latent nothing",
+                "width": "512",
+                "height": "512",
+                "m1fix": false,
+                "allVisible": true,
+                "dlgData": {
+                    "mode": "txt2img",
+                    "prompt": "background",
+                    "seed": "",
+                    "steps": 20,
+                    "steps_update": "50",
+                    "num": 1,
+                    "modifiers": "highly detailed",
+                    "cfg_value": "7.5",
+                    "strength": 0.37,
+                    "sampling_method": "DPM++ 2M Karras",
+                    "tiling": false,
+                    "enable_hr": false,
+                    "clip": false,
+                    "restore_faces": false
+                },
+                "model": "512-depth-ema",
+                "size": "1024x1024",
+                "timeCalculation": 159.9,
+                "inpainting_model": "512-depth-ema"
+            },
+            "parameters": {
+                "prompt": "",
+                "steps": 0,
+                "seed": 0,
+                "num": 0,
+                "sampling_method": "LMS",
+                "seedList": [
+                    "",
+                    "",
+                    "",
+                    ""
+                ],
+                "imageDialog": null,
+                "regenerate": false,
+                "image64": "",
+                "maskImage64": "",
+                "inpaint_mask_blur": "4",
+                "inpaint_mask_content": "latent noise",
+                "mode": "txt2img",
+                "strength": "1"
+            }
+        },
+        {
+            "generalConfig": {
+                "url": "https://vista-establishment-prior-ken.trycloudflare.com",
+                "tokenid": "okxhzck4ln",
+                "token": "mVDyajClir_tfSmI1ABRJw",
+                "name": "SD GRPC vast.ai",
+                "type": "SDGRPC",
+                "width": "512",
+                "height": "512",
+                "m1fix": false,
+                "allVisible": true,
+                "dlgData": {
+                    "mode": "txt2img",
+                    "prompt": "photo of people having a party with a roast",
+                    "seed": "",
+                    "steps": 15,
+                    "steps_update": "50",
+                    "num": 2,
+                    "modifiers": "highly detailed",
+                    "cfg_value": "7.5",
+                    "strength": ".75",
+                    "sampling_method": "DPMSolver++ 2M (Fast)",
+                    "tiling": false,
+                    "enable_hr": false,
+                    "clip": false,
+                    "restore_faces": false,
+                    "previewMode": ""
+                },
+                "size": "1024x1024",
+                "timeCalculation": 241.46666666666667,
+                "model": "stable-diffusion-v1-5-standard"
+            },
+            "parameters": {
+                "prompt": "",
+                "steps": 0,
+                "seed": 0,
+                "num": 0,
+                "sampling_method": "LMS",
+                "seedList": [
+                    "",
+                    "",
+                    "",
+                    ""
+                ],
+                "imageDialog": null,
+                "regenerate": false,
+                "image64": "",
+                "maskImage64": "",
+                "inpaint_mask_blur": "4",
+                "inpaint_mask_content": "latent noise",
+                "mode": "txt2img",
+                "strength": "1"
+            }
+        },
+        {
+            "generalConfig": {
+                "url": "http://127.0.0.1:5000",
+                "tokenid": "fcrsx0siubk",
+                "token": "",
+                "name": "SD GRPC",
+                "type": "SDGRPC",
+                "width": "512",
+                "height": "512",
+                "m1fix": false,
+                "allVisible": true,
+                "dlgData": {
+                    "mode": "txt2img",
+                    "prompt": "photo of people having a party with a roast",
+                    "seed": "",
+                    "steps": 20,
+                    "steps_update": "50",
+                    "num": 1,
+                    "modifiers": "highly detailed",
+                    "cfg_value": "7.5",
+                    "strength": 0.49,
+                    "sampling_method": "DPMSolver++ 2M (Fast)",
+                    "tiling": false,
+                    "enable_hr": false,
+                    "clip": false,
+                    "restore_faces": false,
+                    "enable_depth": true
+                },
+                "size": "1024x1024",
+                "model": "stable-diffusion-v2-1-standard",
+                "timeCalculation": 185.55
+            },
+            "parameters": {
+                "prompt": "",
+                "steps": 0,
+                "seed": 0,
+                "num": 0,
+                "sampling_method": "LMS",
+                "seedList": [
+                    "",
+                    "",
+                    "",
+                    ""
+                ],
+                "imageDialog": null,
+                "regenerate": false,
+                "image64": "",
+                "maskImage64": "",
+                "inpaint_mask_blur": "4",
+                "inpaint_mask_content": "latent noise",
+                "mode": "txt2img",
+                "strength": "1"
+            }
+        },
+        {
+            "generalConfig": {
+                "url": "http://...",
+                "tokenid": "mrrpm2g0cq",
+                "token": "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",
+                "name": "DALL-E 2",
+                "type": "DALL-E 2",
+                "width": 1024,
+                "height": 1024,
+                "m1fix": false,
+                "allVisible": true,
+                "dlgData": {
+                    "mode": "txt2img",
+                    "prompt": "background",
+                    "num": "2",
+                    "modifiers": "highly detailed",
+                    "tiling": false,
+                    "enable_hr": false,
+                    "clip": false,
+                    "restore_faces": false
+                },
+                "size": "1024x1024",
+                "timeCalculation": 7543
+            },
+            "parameters": {
+                "prompt": "",
+                "num": 0,
+                "imageDialog": null,
+                "regenerate": false,
+                "image64": "",
+                "maskImage64": "",
+                "mode": "txt2img"
+            }
+        },
+        {
+            "generalConfig": {
+                "url": "http://...",
+                "tokenid": "mkq8ri8faok",
+                "token": "sk-tAVDYWtYvyAeeSVbd1YZzmP9yMfoU2dDimsI41d9V4khKHrl",
+                "name": "SD Cloud",
+                "type": "SDCloud",
+                "inpaint_mask_blur": "4",
+                "inpaint_mask_content": "latent nothing",
+                "width": "512",
+                "height": "512",
+                "m1fix": false,
+                "allVisible": true,
+                "dlgData": {
+                    "mode": "txt2img",
+                    "prompt": "ufo in the sky",
+                    "seed": "",
+                    "steps": "15",
+                    "steps_update": "50",
+                    "num": 1,
+                    "modifiers": "highly detailed\r",
+                    "cfg_value": "7.5",
+                    "strength": ".75",
+                    "sampling_method": "Euler a",
+                    "tiling": false,
+                    "enable_hr": false,
+                    "clip": false,
+                    "restore_faces": false
+                },
+                "size": "1024x1024",
+                "timeCalculation": 171.8
+            },
+            "parameters": {
+                "prompt": "",
+                "steps": 0,
+                "seed": 0,
+                "num": 0,
+                "sampling_method": "LMS",
+                "seedList": [
+                    "",
+                    "",
+                    "",
+                    ""
+                ],
+                "imageDialog": null,
+                "regenerate": false,
+                "image64": "",
+                "maskImage64": "",
+                "inpaint_mask_blur": "4",
+                "inpaint_mask_content": "latent nothing",
+                "mode": "txt2img",
+                "strength": "1"
+            }
+        },
+        {
+            "generalConfig": {
+                "url": "http://127.0.0.1:5000",
+                "tokenid": "jb57dxry2y",
+                "token": "",
+                "name": "SD GRPC",
+                "type": "SDGRPC",
+                "width": "512",
+                "height": "512",
+                "m1fix": false,
+                "allVisible": true,
+                "dlgData": {
+                    "mode": "txt2img",
+                    "prompt": "woman head",
+                    "seed": "",
+                    "steps": "15",
+                    "steps_update": "50",
+                    "num": "2",
+                    "modifiers": "highly detailed\r-ugly\r-helmet\r-3d render\rbeautiful\rphoto\rphoto realistic\r",
+                    "cfg_value": "7.5",
+                    "strength": ".75",
+                    "sampling_method": "Euler a",
+                    "tiling": false,
+                    "enable_hr": false,
+                    "clip": false,
+                    "restore_faces": false
+                },
+                "size": "1024x1024",
+                "model": "stable-diffusion-v1-5-standard",
+                "timeCalculation": 17.033333333333335
+            },
+            "parameters": {
+                "prompt": "",
+                "steps": 0,
+                "seed": 0,
+                "num": 0,
+                "sampling_method": "LMS",
+                "seedList": [
+                    "",
+                    "",
+                    "",
+                    ""
+                ],
+                "imageDialog": null,
+                "regenerate": false,
+                "image64": "",
+                "maskImage64": "",
+                "inpaint_mask_blur": "4",
+                "inpaint_mask_content": "latent noise",
+                "mode": "txt2img",
+                "strength": "1"
+            }
+        }
+    ],
+    "currentConfigNum": 1
+}
+        let serverFeatures={tiling:true, strength:true, steps:true,seed:true,samplers:[{name:"LMS"},{name:'Euler a'},{name:'Euler'},{name:'Heun'},{name:'DPM2'},{name:'DPM2 a'},{name:'DDIM'},{name:'PLMS'},{name:'DPMSolver++ 1 Order'},{name:'DPMSolver++ 2 Order'}
+                ,{name:'DPMSolver++ 3 Order'},{name:'DPMSolver++ 2S a'},{name:'DPMSolver++ SDE'},{name:'DPMSolver++ 2M'},{name:'DPMSolver++ 2M (Fast)'}],hr:true,clip:true,image_number_max:9}
+        let component=document.querySelector("fds-ai-editor")
+        component.registerBrush(new brush_Default(),"brush_Default")
+        component.registerBrush(new brush_FromLayers(),"brush_FromLayers")
+        component.registerBrush(new brush_Oil_A(),"brush_Oil_A")
+        component.registerBrush(new brush_Caligraphy(),"brush_Caligraphy")
+        if (!window.uxpHost && window.demomode) {
+            component.document=documentInfo
+            component.layers=layers
+            component.paletteValues.Config=Config
+            component.paletteValues.generate=Config.generalConfig.dlgData
+            component.paletteValues.generate.prompt=Config.globalData.prompt
+            component.paletteValues.generate.modifiers=Config.globalData.modifiers
+            component.paletteValues.generate.mode=""
+            component.paletteValues.serverFeatures=serverFeatures
+        }
+
+/*        component.addEventListener("bodySize",(e) => {
+            console.log("catched event bodySize")
+          
+         })*/
+
+    })
+</script>
+
+        <fds-ai-editor class="darkColorScheme"></fds-ai-editor>
+
+
+
+</body>
+
+</html>
